@@ -1,3 +1,6 @@
 ﻿  Lab5.cpp
-C:\Users\obakh\source\repos\Lab5\Lab5\Lab5.cpp(43,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-  Lab5.vcxproj -> C:\Users\obakh\source\repos\Lab5\x64\Debug\Lab5.exe
+C:\Users\Artem\Documents\Repo\Blockchain\Lab5\Lab5\Lab5.cpp(18,27): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Artem\Documents\Repo\Blockchain\Lab5\Lab5\Lab5.cpp(18,27): warning C4267: инициализация: преобразование из "size_t" в "const int"; возможна потеря данных
+C:\Users\Artem\Documents\Repo\Blockchain\Lab5\Lab5\Lab5.cpp(48,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Artem\Documents\Repo\Blockchain\Lab5\Lab5\Lab5.cpp(81,54): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+  Lab5.vcxproj -> C:\Users\Artem\Documents\Repo\Blockchain\Lab5\x64\Debug\Lab5.exe
