@@ -8,7 +8,7 @@
 using namespace std;
 using namespace std::chrono;
 
-const int N = 200; 
+const int N = 256; 
 double A[N][N + 1], B[N][N + 1];
 
 int generateRandom() {
@@ -40,7 +40,7 @@ void gaussElimination(double A[N][N + 1]) {
 	auto end = high_resolution_clock::now();
 	auto duration = duration_cast<milliseconds>(end - start).count();
 
-	cout << endl << endl << "Time without MPI: " << duration;
+	cout << endl << endl << "Time with MPI: " << duration;
 }
 
 
@@ -148,7 +148,12 @@ int main(int argc, char** argv) {
 
 	if (rank == 0)
 	{
-		cout << endl << endl << "Time with MPI: " << duration << endl << endl;
+		cout << endl;
+		for (int i = 0; i < N; ++i) {
+			cout << "x[" << i << "] = " << A[i][N] << endl;
+		}
+
+		cout << endl << endl << "Time without MPI: " << duration << endl << endl;
 
 		gaussElimination(B);
 	}
