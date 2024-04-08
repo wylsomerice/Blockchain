@@ -8,7 +8,7 @@
 using namespace std;
 using namespace std::chrono;
 
-const int N = 256; 
+const int N = 4; 
 double A[N][N + 1], B[N][N + 1];
 
 int generateRandom() {
@@ -16,7 +16,6 @@ int generateRandom() {
 }
 
 void gaussElimination(double A[N][N + 1]) {
-	auto start = high_resolution_clock::now();
 	
 	// Прямой ход
 	for (int k = 0; k < N - 1; k++) {
@@ -37,10 +36,6 @@ void gaussElimination(double A[N][N + 1]) {
 			A[i][k] = 0.0;
 		}
 	}
-	auto end = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(end - start).count();
-
-	cout << endl << endl << "Time with MPI: " << duration;
 }
 
 
@@ -66,7 +61,6 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	auto timerStart = high_resolution_clock::now();
 
 
 	MPI_Bcast(&A[0][0], N * (N + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -75,19 +69,34 @@ int main(int argc, char** argv) {
 	int start = rank * block;
 	int end = start + block;
 	double temp[N][N + 1];
-
+	double koef = 0;
 	for (int k = 0; k < N - 1; k++) {
-
+		
 		if (end - 1 > k) {
 			for (int i = start; i < end; i++) {
 				if (i > k) {
-					double koef = A[i][k] / A[k][k];
+				    koef = A[i][k] / A[k][k];
 					for (int j = k; j < N + 1; j++) {
 						A[i][j] -= koef * A[k][j];
 					}
-				}
+					
+					cout << endl << "iteration = " << k;
 
+					cout << endl << "rank = " << rank << endl;
+
+					cout << "k = " << koef;
+
+					cout << endl;
+					for (int i = 0; i < N; ++i) {
+						for (int j = 0; j < N; ++j) {
+							cout << A[i][j] << "  ";
+						}
+						cout << endl;
+					}
+				}
+				
 			}
+		
 		}
 
 		MPI_Gather(&A[start][0], block * (N + 1), MPI_DOUBLE, &temp[start][0], block * (N + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -103,6 +112,8 @@ int main(int argc, char** argv) {
 			}
 		}
 		MPI_Bcast(&A[0][0], N * (N + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+		
 	}
 
 
@@ -143,8 +154,6 @@ int main(int argc, char** argv) {
 		
 	}
 
-	auto timerEnd = high_resolution_clock::now();
-	auto duration = duration_cast<milliseconds>(timerEnd - timerStart).count();
 
 	if (rank == 0)
 	{
@@ -153,9 +162,7 @@ int main(int argc, char** argv) {
 			cout << "x[" << i << "] = " << A[i][N] << endl;
 		}
 
-		cout << endl << endl << "Time without MPI: " << duration << endl << endl;
-
-		gaussElimination(B);
+		gaussElimination(A);
 	}
 
 	MPI_Finalize();
